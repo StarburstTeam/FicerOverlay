@@ -1,6 +1,3 @@
-import { appWindow } from '@tauri-apps/api/window'
-import { dialog } from '@tauri-apps/api'
-
 import { Config } from "./config"
 import { $ } from "./global"
 import { I18n } from "./i18n"
@@ -19,8 +16,8 @@ const config = new Config(`config.json`, {
 
 let i18n = null;
 window.onload = async () => {
-    $.id('minimize').onclick = _ => appWindow.minimize();
-    $.id('quit').onclick = _ => appWindow.close();
+    $.id('minimize').onclick = _ => window.__TAURI__.window.appWindow.minimize();
+    $.id('quit').onclick = _ => window.__TAURI__.window.appWindow.close();
 
     await config.load();
     i18n = new I18n(config.get('lang'));
@@ -45,7 +42,7 @@ window.onload = async () => {
 }
 
 const selectLogFile = async () => {
-    let temppath = await dialog.open({
+    let temppath = await window.__TAURI__.dialog.open({
         multiple: false,
         title: i18n.now().hud_select_log_file_title,
         filters: [{

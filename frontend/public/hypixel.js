@@ -1,5 +1,3 @@
-import { fetch } from "@tauri-apps/api/http";
-
 import { blacklist } from "./blacklist";
 import { sleep, formatColor, formatColorFromString, toDefault, formatNameString } from "./util";
 import { pushNetworkError } from "./index"
@@ -30,7 +28,7 @@ export class Hypixel {
     getPlayerUuid = async (name) => {//null when the player not found
         if (this.uuids[name] != null) return this.uuids[name];
         let start = new Date().getTime();
-        let a = await fetch(`https://api.mojang.com/users/profiles/minecraft/${name}`)
+        let a = await window.__TAURI__.http.fetch(`https://api.mojang.com/users/profiles/minecraft/${name}`)
             .then(res => {
                 if (res.status == 404) return null;
                 if (res.status == 429) return 429;
@@ -48,7 +46,7 @@ export class Hypixel {
     getPlayerData = async (uuid) => {
         try {
             let start = new Date().getTime();
-            let res = await fetch(`https://api.hypixel.net/player?key=${this.apiKey}&uuid=${uuid}`)
+            let res = await window.__TAURI__.http.fetch(`https://api.hypixel.net/player?key=${this.apiKey}&uuid=${uuid}`)
                 .catch(err => { throw err })
                 .then(res => {
                     this.max_rate_limit = +res.headers['ratelimit-limit'];
@@ -67,7 +65,7 @@ export class Hypixel {
     getGuildData = async (uuid) => {
         try {
             let start = new Date().getTime();
-            let res = await fetch(`https://api.hypixel.net/guild?key=${this.apiKey}&player=${uuid}`)
+            let res = await window.__TAURI__.http.fetch(`https://api.hypixel.net/guild?key=${this.apiKey}&player=${uuid}`)
                 .catch(err => { throw err })
                 .then(res => {
                     this.max_rate_limit = +res.headers['ratelimit-limit'];
@@ -258,7 +256,7 @@ export class Hypixel {
     }
     getGuild = (lang, name) => getGuild[lang](this.data[name].guild, this.uuids[name]);
     getStatus = async (lang, name) => {
-        const b = await fetch(`https://api.hypixel.net/status?key=${this.apiKey}&uuid=${await this.getPlayerUuid(name)}`)
+        const b = await window.__TAURI__.http.fetch(`https://api.hypixel.net/status?key=${this.apiKey}&uuid=${await this.getPlayerUuid(name)}`)
             .catch(reason => console.log(reason))
             .then(res => res.data);
         if (!b.success)

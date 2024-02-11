@@ -1,10 +1,10 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/schema.json",
   "build": {
-    "beforeBuildCommand": "yarn run build",
+    "beforeBuildCommand": "",
     "beforeDevCommand": "yarn run dev",
     "devPath": "http://localhost:5173",
-    "distDir": "../frontend/dist",
+    "distDir": "../frontend",
     "withGlobalTauri": true
   },
   "package": {

@@ -1,6 +1,3 @@
-import { appWindow } from '@tauri-apps/api/window'
-import { shell } from "@tauri-apps/api"
-
 import { Config } from './config'
 import { I18n } from './i18n'
 import { Hypixel, modeList, socialMediaList, getSocialMedia } from './hypixel'
@@ -28,8 +25,8 @@ window.onload = async () => {
     i18n.initPage();
     hypixel = new Hypixel(config.get('apiKey'));
 
-    $.id('minimize').onclick = _ => appWindow.minimize();
-    $.id('quit').onclick = _ => appWindow.close();
+    $.id('minimize').onclick = _ => window.__TAURI__.window.appWindow.minimize();
+    $.id('quit').onclick = _ => window.__TAURI__.window.appWindow.close();
 
     $.id('searchButton').onclick = _ => search();
     $.id('downloadSkin').onclick = _ => downloadSkin();
@@ -79,7 +76,7 @@ const search = async (name) => {
             let icon = document.createElement('img');
             icon.src = 'img/icons/' + cur.toLowerCase() + '.png';
             icon.style = 'width:70px;height:70px;';
-            icon.addEventListener('click', () => shell.open(link));
+            icon.addEventListener('click', () => window.__TAURI__.shell.open(link));
             prev.appendChild(icon);
         }
         return prev;

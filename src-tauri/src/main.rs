@@ -8,6 +8,14 @@ use tauri::Manager;
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![tail_file])
+        .setup(|app| {
+            #[cfg(debug_assertions)] //仅在调试时自动打开开发者工具
+            {
+                let main_window = app.get_window("main").unwrap();
+                main_window.open_devtools();
+            }
+            Ok(())
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,6 +1,3 @@
-import { LogicalSize, LogicalPosition, appWindow, WebviewWindow } from '@tauri-apps/api/window'
-import { process, dialog, notification } from '@tauri-apps/api'
-
 import { Tail } from './tail'
 import { Config } from './config'
 import { I18n } from './i18n'
@@ -36,8 +33,8 @@ window.onload = async () => {
     if (!await config.load())
         window.location.href = "setup.html"
     await windowConfig.load();
-    appWindow.setSize(new LogicalSize(windowConfig.get('width'), windowConfig.get('height')));
-    appWindow.setPosition(new LogicalPosition(windowConfig.get('x'), windowConfig.get('y')));
+    window.__TAURI__.window.appWindow.setSize(new window.__TAURI__.window.LogicalSize(windowConfig.get('width'), windowConfig.get('height')));
+    window.__TAURI__.window.appWindow.setPosition(new window.__TAURI__.window.LogicalPosition(windowConfig.get('x'), windowConfig.get('y')));
     window.screenX = window.screenLeft = windowConfig.get('x');
     window.screenY = window.screenTop = windowConfig.get('y');
 
@@ -90,8 +87,8 @@ window.onload = async () => {
     $.id('cps_reset').onclick = _ => resetTest(i18n);
 
     $.id('show').onclick = _ => resize(null, true);
-    $.id('minimize').onclick = _ => appWindow.minimize();
-    $.id('quit').onclick = _ => { onClose(); appWindow.close(); }
+    $.id('minimize').onclick = _ => window.__TAURI__.window.appWindow.minimize();
+    $.id('quit').onclick = _ => { onClose(); window.__TAURI__.window.appWindow.close(); }
 
     $.id('search_single').onkeydown = key => {
         if (key.key == 'Enter')
@@ -202,7 +199,7 @@ window.onload = async () => {
         } else if (msg.indexOf(i18n_hypixel.now().chat_game_start_1_second) != -1 && msg.indexOf(':') == -1) {
             resize(false);
             if (config.get('notification'))
-                notification.sendNotification({
+                window.__TAURI__.notification.sendNotification({
                     title: i18n_hypixel.now().notification_start_title,
                     body: i18n_hypixel.now().notification_start_body,
                     // icon:
@@ -249,7 +246,7 @@ const switchPage = (page) => {
 }
 
 const openSearchPage = () => {
-    new WebviewWindow('search', {
+    new window.__TAURI__.window.WebviewWindow('search', {
         url: 'search.html',
         alwaysOnTop: true,
         decorations: false,
@@ -267,7 +264,7 @@ const resize = (show, force) => {
     else nowShow ^= true;
     $.id('show').style.transform = `rotate(${nowShow ? 0 : 90}deg)`;
     console.log({ w: windowConfig.get('width'), h: nowShow ? windowConfig.get('height') : 40 })
-    appWindow.setSize(new LogicalSize(windowConfig.get('width'), nowShow ? windowConfig.get('height') : 40));
+    window.__TAURI__.window.appWindow.setSize(new window.__TAURI__.window.LogicalSize(windowConfig.get('width'), nowShow ? windowConfig.get('height') : 40));
 }
 
 const changeDiv = () => {
@@ -385,7 +382,7 @@ const pickDataAndSort = () => {
 }
 
 const selectLogFile = async () => {
-    let temppath = await dialog.open({
+    let temppath = await window.__TAURI__.dialog.open({
         multiple: false,
         title: i18n.now().hud_select_log_file_title,
         filters: [{
@@ -395,7 +392,7 @@ const selectLogFile = async () => {
     });
     if (temppath != null) {
         config.set('logPath', temppath.split('\\').join('/'));
-        process.relaunch();
+        window.__TAURI__.process.relaunch();
     }
 }
 
@@ -409,14 +406,14 @@ const clearMainPanel = () => {
 
 window.onresize = async () => {
     if (config.config != null && nowShow) {
-        let size = await appWindow.outerSize();
+        let size = await window.__TAURI__.window.appWindow.outerSize();
         windowConfig.set('width', size.width);
         windowConfig.set('height', size.height);
     }
 }
 
 const onClose = async () => {
-    let position = await appWindow.outerPosition();
+    let position = await window.__TAURI__.window.appWindow.outerPosition();
     windowConfig.set('x', position.x);
     windowConfig.set('y', position.y);
 }

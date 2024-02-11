@@ -1,18 +1,15 @@
-import { appConfigDir } from "@tauri-apps/api/path";
-import { exists, readTextFile, writeTextFile } from "@tauri-apps/api/fs";
-
 export class Config {
     constructor(path, defaultValue) {
         this.path = path;
         this.defaultValue = defaultValue == null ? {} : defaultValue
     }
     load = async () => {
-        this.path = await appConfigDir() + this.path;
-        if (!await exists(this.path)) {
+        this.path = await window.__TAURI__.path.appConfigDir() + this.path;
+        if (!await window.__TAURI__.fs.exists(this.path)) {
             this.config = this.defaultValue
             return false;
         }
-        let data = await readTextFile(this.path);
+        let data = await window.__TAURI__.fs.readTextFile(this.path);
         this.config = JSON.parse(data);
         console.log(this.config);
         return true;
@@ -28,7 +25,7 @@ export class Config {
     set = async (name, val) => {
         console.log(name, val);
         this.config[name] = val;
-        await writeTextFile(this.path, JSON.stringify(this.config))
+        await window.__TAURI__.fs.writeTextFile(this.path, JSON.stringify(this.config))
     }
 }
 
