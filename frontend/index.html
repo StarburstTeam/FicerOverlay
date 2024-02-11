@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Starburst Overlay</title>
+    <script type="module" src="public/blacklist.js"></script>
+    <script type="module" src="public/global.js"></script>
+    <script type="module" src="public/i18n.js"></script>
+    <script type="module" src="public/util.js"></script>
+    <script type="module" src="public/config.js"></script>
+    <script type="module" src="public/hypixel.js"></script>
+    <script type="module" src="public/index.js"></script>
+    <script type="module" src="public/i18n/hypixel_i18n.js"></script>
+    <script type="module" src="public/cps.js"></script>
+    <link rel="styleSheet" href="scrollbar.css">
+    <link rel="styleSheet" href="switch.css">
+    <link rel="styleSheet" href="index.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+
+<body>
+    <div id="menu" class="menu" data-tauri-drag-region>
+        <div class="title" style="position:absolute;left:5px;top:-5px" data-tauri-drag-region>Starburst</div>
+        <div id="buttons" data-tauri-drag-region>
+            <button id="quit" class="menu_button"></button>
+            <button id="minimize" class="menu_button"></button>
+            <button id="show" class="menu_button"></button>
+            <button id="info" class="menu_button info"></button>
+            <button id="settings" class="menu_button settings"></button>
+            <button id="session" class="menu_button session"></button>
+            <button id="search" class="menu_button search"></button>
+            <button id="cps" class="menu_button cps"></button>
+            <button id="update" class="update" hidden
+                onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy/StarburstOverlay-Wails/releases')"></button>
+            <h4 id="current_ping" class="menu_draggable"></h4>
+            <svg class="menu_draggable" style="width:36px;height:36px;">
+                <circle class="progress_circle" cx="18" cy="18" r="15" id="api_limit_reset"></circle>
+                <text x="18" y="23" text-anchor="middle">
+                    <tspan class="progress_text" id="api_limit_reset_num" title="API Limit Reset">0</tspan>
+                </text>
+            </svg>
+            <svg class="menu_draggable" style="width:36px;height:36px;">
+                <circle class="progress_circle" cx="18" cy="18" r="15" id="api_limit_remain"></circle>
+                <text x="18" y="23" text-anchor="middle">
+                    <tspan class="progress_text" id="api_limit_remain_num" title="API Limit Remain">0</tspan>
+                </text>
+            </svg>
+        </div>
+    </div>
+    <div id="mainPage" style="width:100%;height:100%">
+        <div style="height:20px;display:inline;">
+            <input style="position:relative;left:10px;display: inline-block;top:-20px;width: 200px;" id="search_single"
+                type="text" placeholder="Enter Player Name">
+            <button class="setting_button  add_button" id="add_manual">+</button>
+            <h4 id="current_mode" style="font-size:20px;display: inline-block"></h4>
+        </div>
+        <table id="main" border="1"
+            style="display:inline-block;width:100%;top:-35px;height:calc(100% - 85px);overflow-y:scroll;font-size:15px;position:relative">
+        </table>
+    </div>
+    <div id="settingPage" hidden>
+        <br>
+        <div id="basic" class="setting_subtitle" style="font-weight: bolder;"></div><br><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" id="language">Software Language:</div>
+            <select id="lang" style="height:auto">
+                <option value="en_us">English</option>
+                <option value="zh_cn">简体中文</option>
+            </select>
+            <span class="tooltiptext" id="language_tooltip">The language you set in game</span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" id="language_hypixel">Hypixel In-Game Language:</div>
+            <select id="lang_hypixel" style="height:auto">
+                <option value="en_us">English</option>
+                <option value="zh_cn">简体中文</option>
+            </select>
+            <span class="tooltiptext" id="language_tooltip_hypixel">The language you set in game</span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" style="float:left" id="setting_log_path">Log Path :</div>
+            <button class="setting_button" onclick="selectLogFile()" id="setting_change_log_path">Set Log
+                Path</button>
+            <span class="tooltiptext" id="log_tooltip">The log path your current client used.</span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" style="float:left" id="api_key">Hypixel API Key</div>
+            <input id="apiKey" type="password" style="width: 380px;" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+            <button class="setting_button" id="copy_api_key">Copy</button>
+            <br>
+            <span class="tooltiptext" id="api_tooltip">Get the API key from <a>developer.hypixel.net</a></span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" style="float:left" id="ign_i">IGN :</div>
+            <input id="ign" type="text" style="width: 380px;">
+            <br>
+            <span class="tooltiptext" id="ign_tooltip">Your in game name</span>
+        </div><br>
+        <div id="extra" class="setting_subtitle" style="font-weight: bolder;"></div><br><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" id="setting_game_type">Game Type :</div>
+            <select id="infotype" style="height:auto">
+                <option value="bw">Bed War</option>
+                <option value="sw">Sky War</option>
+                <option value="mm">Murder Mystery</option>
+                <option value="duel">Duel</option>
+                <option value="tnt">TNT Game</option>
+                <option value="uhc">UHC Champion</option>
+                <option value="mw">Mega Wall</option>
+                <option value="ww">Wool War</option>
+                <option value="bsg">Blitz Survive Game</option>
+            </select>
+            <select id="subGame" style="height:auto"></select>
+            <br>
+            <span class="tooltiptext" id="game_mode_tooltip">The game you currently playing</a></span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" style="float:left" id="copy_chat_suffix">Copy Chat Suffix</div>
+            <input id="copyChatSuffix" style="width: 380px;">
+            <br>
+            <span class="tooltiptext" id="copy_chat_suffix_tooltip">Exclude copy chat button in log. Example:
+                [C]</a></span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" id="setting_auto_shrink">Auto Shrink :</div>
+            <label class="switch" style="top:10px;">
+                <input id="autoShrink" type="checkbox">
+                <div class="slider round"></div>
+            </label>
+            <span class="tooltiptext" id="auto_shrink_tooltip">Shrink the window automatically when game
+                start</a></span>
+        </div><br>
+        <div class="tooltip">
+            <div class="setting_subtitle" id="setting_notification">Game Start Notification :</div>
+            <label class="switch" style="top:10px;">
+                <input id="notification" type="checkbox">
+                <div class="slider round"></div>
+            </label>
+            <span class="tooltiptext" id="start_notification_tooltip">Send a notification when game start</a></span>
+        </div><br>
+    </div>
+    <div id="cpsPage" style="text-align:center" hidden>
+        <div>
+            <button class="setting_button" id="cps_1s">1s</button>
+            <button class="setting_button" id="cps_5s">5s</button>
+            <button class="setting_button" id="cps_10s">10s</button>
+            <button class="setting_button" id="cps_20s">20s</button>
+        </div>
+        <h3 id="cpsTestTime" style="color:aqua">Test Time : 10s</h3>
+        <button id="testCpsButton" class="setting_button" style="margin:20px;width:50%;height:200px">
+            Click to Start</button>
+        <h3 id="cpsTestResult" style="color:aqua"></h3>
+        <button class="setting_button" id="cps_reset">Reset</button>
+    </div>
+    <div id="infoPage" hidden>
+        <div>
+            <div class="infopage" style="margin-left:15px;width:100%;margin-left:2px;text-align:left;color:aqua"
+                id="color_key">&nbsp;Stats Color Key :</div>
+            <div class="infopage" style="background:#AAAAAA;color:#000000;width:16%;margin-left:5px" id="bad">BAD</div>
+            <div class="infopage" style="background:#FFFFFF;color:#AAAAAA;width:16%" id="ok">OK</div>
+            <div class="infopage" style="background:#55FF55;color:#c3ffc3;width:16%" id="good">GOOD</div>
+            <div class="infopage" style="background:#55FFFF;color:#0000ff;width:16%" id="epic">EPIC</div>
+            <div class="infopage" style="background:#FF5555;color:#f990ff;width:16%" id="legend">LEGEND</div>
+            <div class="infopage" style="background:#FFAA00;color:#ffff00;width:16%" id="god">GOD</div>
+        </div>
+        <div>
+            <h2 style="color:aqua" id="maintainer">&nbsp;&nbsp;Maintainer</h2>
+            <div style="display:flex;" onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy')">
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <img src="./img/iafenvoy.jpg" style="width:60px;height:60px;border-radius:30px;">
+                <h2 style="color:aqua">&nbsp;&nbsp;IAFEnvoy</h2>
+            </div>
+        </div>
+        <p class="infopage" style="color:aqua" id="link_github"
+            onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy/StarburstOverlay-Wails/issues')">
+            &nbsp; If you meet any problems or ideas, tell me on my Github! (Click here to open)</p>
+    </div>
+    <div id="sessionPage" hidden>
+        <button id="updateSession" class="setting_button" style="position:relative;left:20px;top:10px">Update
+            Now</button>
+        <button id="resetSession" class="setting_button" style="position:relative;left:20px;top:10px">Reset
+            Session</button>
+        <div id="player_name" class="infoData" style="font-size:x-large;position:relative;top:20px;left:20px;"></div>
+        <div id="session_data" class="infoData" style="position:relative;top:40px;left:20px;"></div>
+        <img id="skin" style="position:absolute;right:20px;top:60px">
+    </div>
+    <div id="message" class="message" style="position:absolute;left:25%;width:50%;height:auto;bottom:50px;">
+    </div>
+</body>

@@ -1,0 +1,20 @@
+{
+  "name": "ficer-overlay",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Ficer Overlay",
+  "scripts": {
+    "dev": "cd frontend && set RUST_BACKTRACE=1 && vite",
+    "build": "cd frontend && set RUST_BACKTRACE=1 && vite build",
+    "preview": "cd frontend && set RUST_BACKTRACE=1 && vite preview"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.9"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.3",
+    "events": "^3.3.0",
+    "tauri-plugin-fs-watch-api": "https://github.com/tauri-apps/tauri-plugin-fs-watch#v1",
+    "vite": "^5.1.1"
+  }
+}
