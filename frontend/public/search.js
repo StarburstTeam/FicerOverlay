@@ -1,10 +1,3 @@
-import { Config } from './config'
-import { I18n } from './i18n'
-import { Hypixel, modeList, socialMediaList, getSocialMedia } from './hypixel'
-import { formatColor } from './util'
-import { buildData, getData } from './i18n/hypixel_i18n'
-import { $ } from './global'
-
 const config = new Config(`config.json`, {
     lang: 'en_us',
     lang_hypixel: 'en_us',

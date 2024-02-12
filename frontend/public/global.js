@@ -1,3 +1,3 @@
-export const $ = {
+const $ = {
     id: id => document.getElementById(id)
 }

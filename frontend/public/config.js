@@ -1,4 +1,4 @@
-export class Config {
+class Config {
     constructor(path, defaultValue) {
         this.path = path;
         this.defaultValue = defaultValue == null ? {} : defaultValue

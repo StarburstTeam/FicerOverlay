@@ -1,6 +1,6 @@
-export let blacklist = {};
+let blacklist = {};
 
-export const loadBlacklist = async () => {
+const loadBlacklist = async () => {
     blacklist = await window.__TAURI__.http.fetch("https://starburst.iafenvoy.net/blacklist.json")
         .then(res => res.data);
 }

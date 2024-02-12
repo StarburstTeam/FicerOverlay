@@ -1,25 +1,25 @@
-export const sleep = (time) => new Promise(resolve => setTimeout(() => resolve(), time))
+const sleep = (time) => new Promise(resolve => setTimeout(() => resolve(), time))
 
 const colorMap = Object.fromEntries([
     'black', 'dark_blue', 'dark_green', 'dark_aqua', 'dark_red', 'dark_purple', 'gold', 'gray',
     'dark_gray', 'blue', 'green', 'aqua', 'red', 'light_purple', 'yellow', 'white'
 ].map((c, i) => [c, "§" + i.toString(16)]))
-export const formatColorFromString = name => colorMap[name.toLowerCase()];
+const formatColorFromString = name => colorMap[name.toLowerCase()];
 //color parser
 const colors = [
     '#000000', '#0000AA', '#00AA00', '#00AAAA', '#AA0000', '#AA00AA', '#FFAA00', '#AAAAAA',
     '#555555', '#5555FF', '#55FF55', '#55FFFF', '#FF5555', '#FF55FF', '#FFFF55', '#FFFFFF'
 ];
-export const formatColor = (data, default_color = 0) => {
+const formatColor = (data, default_color = 0) => {
     if (data == null) return 'Fail to get';
     return data.split('').reduce((ret, char, index, arr) =>
         ret += char == '§' ? '</span>' : arr[index - 1] == '§' ? '<span style="color:' + colors[parseInt(char, 16)] + '">' : char,
         '<span style="color:' + colors[default_color] + '">') + '</span>';
 }
 
-export const toDefault = (v, u, d) => v == u ? d : v;
+const toDefault = (v, u, d) => v == u ? d : v;
 
-export const formatDateTime = (date) => {
+const formatDateTime = (date) => {
     if (date == null) return 'Fail to get';
     date = new Date(date);
     let y = date.getFullYear();
@@ -36,9 +36,9 @@ export const formatDateTime = (date) => {
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
 };
 
-export const formatNameString = name => name.toLowerCase().split('_').reduce((ret, word) => ret + word[0].toUpperCase() + word.slice(1) + ' ', '');
+const formatNameString = name => name.toLowerCase().split('_').reduce((ret, word) => ret + word[0].toUpperCase() + word.slice(1) + ' ', '');
 
-export const compairVersion = (v1, v2) => {
+const compairVersion = (v1, v2) => {
     //补位0，或者使用其它字符
     const ZERO_STR = '000000000000000000000000000000000000000000';
     if (v1 === v2)

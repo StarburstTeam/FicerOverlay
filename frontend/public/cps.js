@@ -1,14 +1,12 @@
-import { $ } from "./global";
-
 let testTime = 10 * 1000, testing = false, tested = false;
 let leftCnt = 0, rightCnt = 0;
 
-export const setTestTime = (time, i18n) => {
+const setTestTime = (time, i18n) => {
     testTime = time * 1000;
     $.id('cpsTestTime').innerText = `${i18n.now().cps_test_time}${time}${i18n.now().cps_second}`;
 }
 
-export const onTestClick = (button, i18n) => {
+const onTestClick = (button, i18n) => {
     if (tested) return;
     if (!testing) {
         leftCnt = rightCnt = 0;
@@ -35,7 +33,7 @@ export const onTestClick = (button, i18n) => {
     if (button == 2) rightCnt++;
 }
 
-export const resetTest = (i18n) => {
+const resetTest = (i18n) => {
     tested = false;
     $.id('cpsTestResult').innerHTML = '';
     $.id('testCpsButton').innerHTML = i18n.now().cps_click_to_start;

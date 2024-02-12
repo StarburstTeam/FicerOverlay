@@ -1,13 +1,3 @@
-import { Tail } from './tail'
-import { Config } from './config'
-import { I18n } from './i18n'
-import { Hypixel } from './hypixel'
-import { loadBlacklist } from './blacklist'
-import { setTestTime, onTestClick, resetTest } from './cps'
-import { formatColor } from './util'
-import { $ } from './global'
-import { buildData } from './i18n/hypixel_i18n'
-
 const config = new Config(`config.json`, {
     lang: 'en_us',
     lang_hypixel: 'en_us',
@@ -419,7 +409,7 @@ const onClose = async () => {
 }
 
 let stable_message = false;
-export const pushNetworkError = (code) => {
+const pushNetworkError = (code) => {
     if (code == 403) pushError(`${i18n.now().error_api_key_invalid}<br>${i18n.now().info_api_new}`, true);
     else if (code == 429) pushError(`${i18n.now().error_api_limit_exceeded}`, true);
 }

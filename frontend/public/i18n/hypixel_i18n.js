@@ -1,7 +1,4 @@
-import { formatNameString, formatDateTime, formatColor, formatColorFromString } from "../util";
-import { getThePitLevel } from "../hypixel";
-
-export const getData = {
+const getData = {
     'en_us': {
         "ov": (api) => {
             let achievements = api.achievements ?? {};
@@ -216,7 +213,7 @@ const getRoundValue = {
     }
 }
 
-export const getGuild = {
+const getGuild = {
     'en_us': (guildJson, uuid) => {
         if (guildJson == null) return 'Guild : No Guild';
         let data = `Guild : ${guildJson.name}<br>
@@ -241,7 +238,7 @@ export const getGuild = {
     }
 }
 
-export const getStatus = {
+const getStatus = {
     'en_us': (statusJson) => {
         if (statusJson.online)
             if (statusJson.map != null)
@@ -307,7 +304,7 @@ const buildValues = (name1, name2, nameR, obj1, obj2, key1, key2, fixed = 2) => 
 }
 
 //全局搜索页面只需要传入第一个api，session stats需要传入两个
-export const buildData = {
+const buildData = {
     'ov': (i18n, api1, api2) => {
         let achievements1 = api1?.achievements ?? {}, achievements2 = api2?.achievements ?? {};
     },

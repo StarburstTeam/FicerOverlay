@@ -1,4 +1,4 @@
-export class Tail {
+class Tail {
     constructor(path, callback) {
         this.path = path;
         this.callback = callback;

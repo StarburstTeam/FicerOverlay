@@ -1,4 +1,4 @@
-export const ZH_CN = {
+const ZH_CN = {
     "id": "zh_cn",
     "name": "简体中文",
     "values": {

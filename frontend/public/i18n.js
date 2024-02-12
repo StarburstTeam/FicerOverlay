@@ -1,8 +1,4 @@
-import { $ } from "./global";
-import { EN_US } from "./lang/en_us";
-import { ZH_CN } from "./lang/zh_cn";
-
-export class I18n {
+class I18n {
     constructor(current) {
         this.current = current;
     }

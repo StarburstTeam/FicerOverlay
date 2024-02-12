@@ -1,4 +1,4 @@
-export const EN_US = {
+const EN_US = {
     "id": "en_us",
     "name": "English",
     "values": {

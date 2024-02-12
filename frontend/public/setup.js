@@ -1,7 +1,3 @@
-import { Config } from "./config"
-import { $ } from "./global"
-import { I18n } from "./i18n"
-
 const config = new Config(`config.json`, {
     lang: 'en_us',
     lang_hypixel: 'en_us',

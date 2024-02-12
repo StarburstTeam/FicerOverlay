@@ -1,11 +1,5 @@
-import { blacklist } from "./blacklist";
-import { sleep, formatColor, formatColorFromString, toDefault, formatNameString } from "./util";
-import { pushNetworkError } from "./index"
-import { getGuild, getStatus } from "./i18n/hypixel_i18n";
-import { $ } from "./global";
-
 //this file contains api to hypixel
-export class Hypixel {
+class Hypixel {
     constructor(apiKey) {
         this.apiKey = apiKey;
         this.self_ign = '';
@@ -372,13 +366,13 @@ const formatBwLevel = (lvl) => {
 }
 
 //searcher
-export const modeList = ['bw', 'sw', 'mm', 'duel', 'uhc', 'mw', 'bb', 'bsg'];
+const modeList = ['bw', 'sw', 'mm', 'duel', 'uhc', 'mw', 'bb', 'bsg'];
 
 // 在等级 10 * k 至 10 * (k + 1) 时, 升一级所需经验
 const expReqPhased = [15, 30, 50, 75, 125, 300, 600, 800, 900, 1000, 1200, 1500];
 // 在精通 k 时, 升一级所需经验需要乘以的倍数
 const presMultipl = [1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 45, 50, 75, 100, 101, 101, 101, 101, 101];
-export const getThePitLevel = (pitProfile) => {
+const getThePitLevel = (pitProfile) => {
     level = 0;
     let xp = pitProfile.xp ?? 0;
     for (let i = 0; i < presMultipl.length; i++)
@@ -390,5 +384,5 @@ export const getThePitLevel = (pitProfile) => {
             }
 }
 
-export const socialMediaList = ['DISCORD', 'HYPIXEL', 'TWITCH', 'TWITTER', 'YOUTUBE'];
-export const getSocialMedia = (platform, api) => api?.socialMedia?.links[platform] ?? null;
+const socialMediaList = ['DISCORD', 'HYPIXEL', 'TWITCH', 'TWITTER', 'YOUTUBE'];
+const getSocialMedia = (platform, api) => api?.socialMedia?.links[platform] ?? null;
