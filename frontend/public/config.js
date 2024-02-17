@@ -6,19 +6,19 @@ class Config {
     }
     getPath = async () => {
         if (this.configPath === null) {
-            this.configPath = await window.__TAURI__.path.appConfigDir();
-            if (!await window.__TAURI__.fs.exists(this.configPath))
-                await window.__TAURI__.fs.createDir(this.configPath);
+            this.configPath = await tauri.path.appConfigDir();
+            if (!await tauri.fs.exists(this.configPath))
+                await tauri.fs.createDir(this.configPath);
         }
         return this.configPath + this.path;
     }
     load = async () => {
         let path = await this.getPath();
-        if (!await window.__TAURI__.fs.exists(path)) {
+        if (!await tauri.fs.exists(path)) {
             this.config = this.defaultValue
             return false;
         }
-        let data = await window.__TAURI__.fs.readTextFile(path);
+        let data = await tauri.fs.readTextFile(path);
         this.config = JSON.parse(data);
         console.log(this.config);
         return true;
@@ -34,7 +34,7 @@ class Config {
     set = async (name, val) => {
         console.log(name, val);
         this.config[name] = val;
-        await window.__TAURI__.fs.writeTextFile(await this.getPath(), JSON.stringify(this.config))
+        await tauri.fs.writeTextFile(await this.getPath(), JSON.stringify(this.config))
     }
 }
 
