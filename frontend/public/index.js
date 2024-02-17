@@ -11,6 +11,7 @@ const config = new Config(`config.json`, {
     copyChatSuffix: ' [C]'
 });
 const windowConfig = new Config(`window.json`, {
+    init: false,
     width: 1080,
     height: 550,
     x: 40,
@@ -19,12 +20,32 @@ const windowConfig = new Config(`window.json`, {
 let i18n = null, i18n_hypixel = null;
 let players = [], party = [], hypixel = null, nowType = null, nowSub = null, inLobby = false, missingPlayer = false, numplayers = 0, hasLog = false;
 
+const getWindowSize = () => {
+    let width = windowConfig.get('width');
+    let height = windowConfig.get('height');
+    if (windowConfig.get('init')) {
+        return new tauri.window.PhysicalSize(width, height);
+    } else {
+        return new tauri.window.LogicalSize(width, height);
+    }
+}
+
+const getWindowPos = () => {
+    let x = windowConfig.get('x');
+    let y = windowConfig.get('y');
+    if (windowConfig.get('init')) {
+        return new tauri.window.PhysicalPosition(x, y);
+    } else {
+        return new tauri.window.LogicalPosition(x, y);
+    }
+}
+
 window.onload = async () => {
     if (!await config.load())
         window.location.href = "setup.html"
     await windowConfig.load();
-    tauri.window.appWindow.setSize(new tauri.window.LogicalSize(windowConfig.get('width'), windowConfig.get('height')));
-    tauri.window.appWindow.setPosition(new tauri.window.LogicalPosition(windowConfig.get('x'), windowConfig.get('y')));
+    tauri.window.appWindow.setSize(getWindowSize());
+    tauri.window.appWindow.setPosition(getWindowPos());
     window.screenX = window.screenLeft = windowConfig.get('x');
     window.screenY = window.screenTop = windowConfig.get('y');
 
@@ -78,7 +99,7 @@ window.onload = async () => {
 
     $.id('show').onclick = _ => resize(null, true);
     $.id('minimize').onclick = _ => tauri.window.appWindow.minimize();
-    $.id('quit').onclick = _ => { onClose(); tauri.window.appWindow.close(); }
+    $.id('quit').onclick = async _ => { await onClose(); tauri.window.appWindow.close(); }
 
     $.id('search_single').onkeydown = key => {
         if (key.key == 'Enter')
@@ -254,7 +275,7 @@ const resize = (show, force) => {
     else nowShow ^= true;
     $.id('show').style.transform = `rotate(${nowShow ? 0 : 90}deg)`;
     console.log({ w: windowConfig.get('width'), h: nowShow ? windowConfig.get('height') : 40 })
-    tauri.window.appWindow.setSize(new tauri.window.LogicalSize(windowConfig.get('width'), nowShow ? windowConfig.get('height') : 40));
+    tauri.window.appWindow.setSize(new tauri.window.PhysicalSize(windowConfig.get('width'), nowShow ? windowConfig.get('height') : 40));
 }
 
 const changeDiv = () => {
@@ -394,19 +415,20 @@ const clearMainPanel = () => {
     ${category.reduce((p, c, i) => p + `<th id="sort_${i + 3}" style="width:100px">${c}</th>`, '')}</tr>`;
 }
 
-window.onresize = async () => {
-    if (config.config != null && nowShow) {
+const saveWindowConfig = async () => {
+    if (config.config != null && nowShow && !await tauri.window.appWindow.isMinimized()) {
         let size = await tauri.window.appWindow.outerSize();
         windowConfig.set('width', size.width);
         windowConfig.set('height', size.height);
+        let position = await tauri.window.appWindow.outerPosition();
+        await windowConfig.set('x', position.x);
+        await windowConfig.set('y', position.y);
+        windowConfig.set('init', true);
     }
 }
 
-const onClose = async () => {
-    let position = await tauri.window.appWindow.outerPosition();
-    windowConfig.set('x', position.x);
-    windowConfig.set('y', position.y);
-}
+window.onresize = saveWindowConfig;
+const onClose = saveWindowConfig;
 
 let stable_message = false;
 const pushNetworkError = (code) => {
