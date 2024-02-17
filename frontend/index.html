@@ -21,7 +21,7 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
 </head>
 
-<body>
+<body oncontextmenu="self.event.returnValue=false">
     <div id="menu" class="menu" data-tauri-drag-region>
         <div class="title" style="position:absolute;left:5px;top:-5px" data-tauri-drag-region>Ficer</div>
         <div id="buttons" data-tauri-drag-region>
@@ -34,7 +34,7 @@
             <button id="search" class="menu_button search"></button>
             <button id="cps" class="menu_button cps"></button>
             <button id="update" class="update" hidden
-                onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy/FicerOverlay/releases')"></button>
+                onclick="tauri.shell.open('https://github.com/IAFEnvoy/FicerOverlay/releases')"></button>
             <h4 id="current_ping" class="menu_draggable"></h4>
             <svg class="menu_draggable" style="width:36px;height:36px;">
                 <circle class="progress_circle" cx="18" cy="18" r="15" id="api_limit_reset"></circle>
@@ -168,14 +168,14 @@
         </div>
         <div>
             <h2 style="color:aqua" id="maintainer">&nbsp;&nbsp;Maintainer</h2>
-            <div style="display:flex;" onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy')">
+            <div style="display:flex;" onclick="tauri.shell.open('https://github.com/IAFEnvoy')">
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <img src="./img/iafenvoy.jpg" style="width:60px;height:60px;border-radius:30px;">
                 <h2 style="color:aqua">&nbsp;&nbsp;IAFEnvoy</h2>
             </div>
         </div>
         <p class="infopage" style="color:aqua" id="link_github"
-            onclick="window.__TAURI__.shell.open('https://github.com/IAFEnvoy/FicerOverlay/issues')">
+            onclick="tauri.shell.open('https://github.com/IAFEnvoy/FicerOverlay/issues')">
             &nbsp; If you meet any problems or ideas, tell me on my Github! (Click here to open)</p>
     </div>
     <div id="sessionPage" hidden>

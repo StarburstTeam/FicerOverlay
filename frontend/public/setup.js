@@ -12,8 +12,8 @@ const config = new Config(`config.json`, {
 
 let i18n = null;
 window.onload = async () => {
-    $.id('minimize').onclick = _ => window.__TAURI__.window.appWindow.minimize();
-    $.id('quit').onclick = _ => window.__TAURI__.window.appWindow.close();
+    $.id('minimize').onclick = _ => tauri.window.appWindow.minimize();
+    $.id('quit').onclick = _ => tauri.window.appWindow.close();
 
     await config.load();
     i18n = new I18n(config.get('lang'));
@@ -38,12 +38,12 @@ window.onload = async () => {
 }
 
 const selectLogFile = async () => {
-    let temppath = await window.__TAURI__.dialog.open({
+    let temppath = await tauri.dialog.open({
         multiple: false,
         title: i18n.now().hud_select_log_file_title,
         filters: [{
             name: 'Log file',
-            extensions: ['latest.log']
+            extensions: ['log']
         }]
     });
     if (temppath != null)

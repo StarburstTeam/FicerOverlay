@@ -304,6 +304,7 @@ const buildValues = (name1, name2, nameR, obj1, obj2, key1, key2, fixed = 2) => 
 }
 
 //全局搜索页面只需要传入第一个api，session stats需要传入两个
+//ov模式没有session stats
 const buildData = {
     'ov': (i18n, api1, api2) => {
         let achievements1 = api1?.achievements ?? {}, achievements2 = api2?.achievements ?? {};

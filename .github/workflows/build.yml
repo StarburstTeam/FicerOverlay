@@ -56,16 +56,6 @@ jobs:
       - name: Build the app
         uses: tauri-apps/tauri-action@v0
 
-      - name: Print Path
-        run: |
-          ls
-          cd src-tauri
-          ls
-          cd target
-          ls
-          cd release
-          ls
-
       - name: Upload Release (MacOS)
         if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v3
@@ -86,6 +76,6 @@ jobs:
         if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: Windows APP
+          name: Windows EXE
           path: src-tauri/target/release/FicerOverlay.exe
           retention-days: 7

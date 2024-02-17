@@ -18,8 +18,8 @@ window.onload = async () => {
     i18n.initPage();
     hypixel = new Hypixel(config.get('apiKey'));
 
-    $.id('minimize').onclick = _ => window.__TAURI__.window.appWindow.minimize();
-    $.id('quit').onclick = _ => window.__TAURI__.window.appWindow.close();
+    $.id('minimize').onclick = _ => tauri.window.appWindow.minimize();
+    $.id('quit').onclick = _ => tauri.window.appWindow.close();
 
     $.id('searchButton').onclick = _ => search();
     $.id('downloadSkin').onclick = _ => downloadSkin();
@@ -69,7 +69,7 @@ const search = async (name) => {
             let icon = document.createElement('img');
             icon.src = 'img/icons/' + cur.toLowerCase() + '.png';
             icon.style = 'width:70px;height:70px;';
-            icon.addEventListener('click', () => window.__TAURI__.shell.open(link));
+            icon.addEventListener('click', () => tauri.shell.open(link));
             prev.appendChild(icon);
         }
         return prev;
