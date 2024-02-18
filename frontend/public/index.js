@@ -402,7 +402,7 @@ const selectLogFile = async () => {
         }]
     });
     if (temppath != null) {
-        config.set('logPath', temppath.split('\\').join('/'));
+        await config.set('logPath', temppath.split('\\').join('/'));
         tauri.process.relaunch();
     }
 }
@@ -418,12 +418,12 @@ const clearMainPanel = () => {
 const saveWindowConfig = async () => {
     if (config.config != null && nowShow && !await tauri.window.appWindow.isMinimized()) {
         let size = await tauri.window.appWindow.outerSize();
-        windowConfig.set('width', size.width);
-        windowConfig.set('height', size.height);
+        await windowConfig.set('width', size.width);
+        await windowConfig.set('height', size.height);
         let position = await tauri.window.appWindow.outerPosition();
         await windowConfig.set('x', position.x);
         await windowConfig.set('y', position.y);
-        windowConfig.set('init', true);
+        await windowConfig.set('init', true);
     }
 }
 
